@@ -118,6 +118,8 @@ namespace Alg_Lab2
                         // назначаем новых детей родителями для старых детей
 
                         //указываем их родителями
+
+                        
                         if (tree.Children[0]!= null)
                             tree.Children[0].Parent = tree1;
                         if (tree.Children[1] != null)
@@ -139,8 +141,9 @@ namespace Alg_Lab2
                         {
                             tree.Children[i] = null;
                         }
-                        
+
                         //Назначаем новых детей 
+
                         int k = 0;
                         for (int i = 0; i < tree.Children.Length; i++)
                         {
@@ -160,6 +163,14 @@ namespace Alg_Lab2
                             }
                         }
 
+                        if (tree.Children[1] != null && tree.Children[2] != null && (tree.Children[0].Values[1]>tree.Children[2].Values[0]))
+                        {
+                            var tmp = tree.Children[2];
+                            tree.Children[2] = tree.Children[1];
+                            tree.Children[1] = tmp;
+                        }
+
+
                     }
                     else
                     {
@@ -178,7 +189,7 @@ namespace Alg_Lab2
                         {
                             if (tree == tree.Parent.Children[i])
                             {
-                                tree.Parent.Children[i] = null; // было = tree.Parent;
+                                tree.Parent.Children[i] = null; 
                                 break;
                             }
                         }
@@ -208,15 +219,12 @@ namespace Alg_Lab2
                             }
                         }
 
-                        //TODO: Проверить что все правильно
-                        //if (tree.Parent.Children[0] == null)
-                        //    tree.Parent.Children[0] = tree1;
-                        //else
-                        //    tree.Parent.Children[1] = tree1;
-                        //if (tree.Parent.Children[3] == null)
-                        //    tree.Parent.Children[3] = tree2;
-                        //else
-                        //    tree.Parent.Children[2] = tree2;
+                        if (tree.Parent.Children[1] != null && tree.Parent.Children[2] != null && (tree.Parent.Children[1].Values[0] > tree.Parent.Children[2].Values[0]))
+                        {
+                            var tmp = tree.Parent.Children[2];
+                            tree.Parent.Children[2] = tree.Parent.Children[1];
+                            tree.Parent.Children[1] = tmp;
+                        }
 
                         //назначаем новые узлы родителями детям старого узла
 
@@ -252,6 +260,7 @@ namespace Alg_Lab2
                     }
                     break;
             }
+            //сюда попадаем после разбиения 4-узла
             int n=0;
             for(int i=0;i<tree.Values.Count;i++)
             {
@@ -273,36 +282,6 @@ namespace Alg_Lab2
             {
                 tree.Children[n+1] = new TwoThreeFourTree(value, tree);
             }
-
-
-
-            //4-узел
-            /*if (ValueLeft != null && ValueMiddle != null && ValueRight != null)
-            {
-                int middle = (int)ValueMiddle;
-
-                ValueMiddle = null;
-                Left = new TwoThreeFourTree((int)ValueLeft, this);
-                Right = new TwoThreeFourTree((int)ValueRight, this);
-
-                ValueLeft = null;
-                ValueRight = null;
-
-                if (IsParent)
-                {
-                    var root = new TwoThreeFourTree(middle);
-                    Parent = root;
-                    if ()
-                    {
-
-                    }
-                }
-            }
-            //Лист
-            if (Left == null && MiddleLeft == null && MiddleRight == null && Right == null)
-            {
-
-            }*/
         }
     }
 }
