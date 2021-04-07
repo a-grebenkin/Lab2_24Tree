@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 
-using System.Drawing;
-
-namespace howto_generic_treenode
+namespace Lab2_24Tree
 {
     class CircleNode : IDrawable
     {
@@ -13,9 +8,9 @@ namespace howto_generic_treenode
         public string Text;
 
         // Constructor.
-        public CircleNode(string new_text)
+        public CircleNode(string newText)
         {
-            Text = new_text;
+            Text = newText;
         }
 
         // Return the size of the string plus a 10 pixel margin.
@@ -25,23 +20,20 @@ namespace howto_generic_treenode
         }
 
         // Draw the object centered at (x, y).
-        void IDrawable.Draw(float x, float y, Graphics gr, Pen pen, Brush bg_brush, Brush text_brush, Font font)
+        void IDrawable.Draw(float x, float y, Graphics gr, Pen pen, Brush bgBrush, Brush textBrush, Font font)
         {
             // Fill and draw an ellipse at our location.
-            SizeF my_size = GetSize(gr, font);
-            RectangleF rect = new RectangleF(
-                x - my_size.Width / 2,
-                y - my_size.Height / 2,
-                my_size.Width, my_size.Height);
-            gr.FillEllipse(bg_brush, rect);
+            var mySize = GetSize(gr, font);
+            var rect = new RectangleF(x - mySize.Width / 2, y - mySize.Height / 2, mySize.Width, mySize.Height);
+            gr.FillEllipse(bgBrush, rect);
             gr.DrawEllipse(pen, rect);
 
             // Draw the text.
-            using (StringFormat string_format = new StringFormat())
+            using (var stringFormat = new StringFormat())
             {
-                string_format.Alignment = StringAlignment.Center;
-                string_format.LineAlignment = StringAlignment.Center;
-                gr.DrawString(Text, font, text_brush, x, y, string_format);
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
+                gr.DrawString(Text, font, textBrush, x, y, stringFormat);
             }
         }
     }

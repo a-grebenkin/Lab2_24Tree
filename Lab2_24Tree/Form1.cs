@@ -1,42 +1,41 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using Alg_Lab2;
+using System.Windows.Forms;
 
-namespace howto_generic_treenode
+namespace Lab2_24Tree
 {
     public partial class Form1 : Form
     {
-        int counter = 1;
-        TwoThreeFourTree tree;
-        private TreeNode<CircleNode> root =
+        private int _counter = 1;
+        private TwoThreeFourTree _tree;
+        private TreeNode<CircleNode> _root =
            new TreeNode<CircleNode>(new CircleNode("[]"));
         public Form1()
         {
             InitializeComponent();
-            tree = null;
+            _tree = null;
         }
 
         private void RenderTree()
         {
-            if (tree != null)
-                AddInTree(TwoThreeFourTree.GetHead(tree));
-            using (Graphics gr = this.CreateGraphics())
+            if (_tree != null)
+                AddInTree(TwoThreeFourTree.GetHead(_tree));
+            using (var gr = this.CreateGraphics())
             {
                 // Arrange the tree once to see how big it is.
                 float xmin = 0, ymin = 0;
-                root.Arrange(gr, ref xmin, ref ymin);
+                _root.Arrange(gr, ref xmin, ref ymin);
 
                 // Arrange the tree again to center it.
-                xmin = (this.ClientSize.Width - xmin) / 2;
+                xmin = (ClientSize.Width - xmin) / 2;
                 //ymin = (this.ClientSize.Height - ymin) / 2;
-                root.Arrange(gr, ref xmin, ref ymin);
+                _root.Arrange(gr, ref xmin, ref ymin);
             }
 
             // Redraw.
-            this.Refresh();
+            Refresh();
         }
 
         private void AddInTree(TwoThreeFourTree tree, TreeNode<CircleNode> parent = null)
@@ -44,12 +43,12 @@ namespace howto_generic_treenode
             if (tree == null)
             {
                 if (checkBox1.Checked)
-                    parent.AddChild(new TreeNode<CircleNode>(new CircleNode("[]")));
+                    parent?.AddChild(new TreeNode<CircleNode>(new CircleNode("[]")));
                 return;
 
             }
-            string text = "";
-            for (int i = 0; i < tree.Values.Count; i++)
+            var text = "";
+            for (var i = 0; i < tree.Values.Count; i++)
             {
                 text += tree.Values[i];
                 if (i != tree.Values.Count - 1)
@@ -60,24 +59,24 @@ namespace howto_generic_treenode
 
             if (tree.Parent == null)
             {
-                root = node;
+                _root = node;
             }
             else
             {
-                parent.AddChild(node);
+                parent?.AddChild(node);
             }
 
             parent = node;
-            for (int i = 0; i < tree.Children.Length; i++)
+            foreach (var t in tree.Children)
             {
-                AddInTree(tree.Children[i], parent);
+                AddInTree(t, parent);
             }
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-            root.DrawTree(e.Graphics);
+            _root.DrawTree(e.Graphics);
         }
 
         // Arrange the tree to center it.
@@ -88,21 +87,22 @@ namespace howto_generic_treenode
 
         private void button_add_Click(object sender, EventArgs e)
         {
-            int value = Int32.Parse(textBox1.Text);
-            if (tree == null)
-                tree = new TwoThreeFourTree(value);
+            var value = Int32.Parse(textBox1.Text);
+            if (_tree == null)
+                _tree = new TwoThreeFourTree(value);
             else
-                TwoThreeFourTree.Add(value, tree);
+                TwoThreeFourTree.Add(value, _tree);
+            textBox1.Text = string.Empty;
             RenderTree();
         }
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            int value = counter++;
-            if (tree == null)
-                tree = new TwoThreeFourTree(value);
+            var value = _counter++;
+            if (_tree == null)
+                _tree = new TwoThreeFourTree(value);
             else
-                TwoThreeFourTree.Add(value, tree);
+                TwoThreeFourTree.Add(value, _tree);
             RenderTree();
         }
 

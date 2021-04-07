@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace howto_generic_treenode
+namespace Lab2_24Tree
 {
-    class TreeNode<T> where T : IDrawable
+    internal class TreeNode<T> where T : IDrawable
     {
         // The data.
         public T Data;
@@ -21,7 +17,7 @@ namespace howto_generic_treenode
         private const float Voffset = 10;
 
         // The node's center after arranging.
-        private PointF Center;
+        private PointF _center;
 
         // Drawing properties.
         public Font MyFont = null;
@@ -30,15 +26,15 @@ namespace howto_generic_treenode
         public Brush BgBrush = Brushes.White;
 
         // Constructor.
-        public TreeNode(T new_data)
-            : this(new_data, new Font("Times New Roman", 12))
+        public TreeNode(T newData) : this(newData, new Font("Segoe UI", 12))
         {
-            Data = new_data;
+            Data = newData;
         }
-        public TreeNode(T new_data, Font fg_font)
+
+        public TreeNode(T newData, Font fgFont)
         {
-            Data = new_data;
-            MyFont = fg_font;
+            Data = newData;
+            MyFont = fgFont;
         }
 
         // Add a TreeNode to out Children list.
@@ -53,21 +49,21 @@ namespace howto_generic_treenode
         public void Arrange(Graphics gr, ref float xmin, ref float ymin)
         {
             // See how big this node is.
-            SizeF my_size = Data.GetSize(gr, MyFont);
+            var mySize = Data.GetSize(gr, MyFont);
 
             // Recursively arrange our children,
             // allowing room for this node.
-            float x = xmin;
-            float biggest_ymin = ymin + my_size.Height;
-            float subtree_ymin = ymin + my_size.Height + Voffset;
-            foreach (TreeNode<T> child in Children)
+            var x = xmin;
+            var biggestYmin = ymin + mySize.Height;
+            var subtreeYmin = ymin + mySize.Height + Voffset;
+            foreach (var child in Children)
             {
                 // Arrange this child's subtree.
-                float child_ymin = subtree_ymin;
-                child.Arrange(gr, ref x, ref child_ymin);
+                var childYmin = subtreeYmin;
+                child.Arrange(gr, ref x, ref childYmin);
 
                 // See if this increases the biggest ymin value.
-                if (biggest_ymin < child_ymin) biggest_ymin = child_ymin;
+                if (biggestYmin < childYmin) biggestYmin = childYmin;
 
                 // Allow room before the next sibling.
                 x += Hoffset;
@@ -77,48 +73,35 @@ namespace howto_generic_treenode
             if (Children.Count > 0) x -= Hoffset;
 
             // See if this node is wider than the subtree under it.
-            float subtree_width = x - xmin;
-            if (my_size.Width > subtree_width)
+            var subtreeWidth = x - xmin;
+            if (mySize.Width > subtreeWidth)
             {
                 // Center the subtree under this node.
                 // Make the children rearrange themselves
                 // moved to center their subtrees.
-                x = xmin + (my_size.Width - subtree_width) / 2;
-                foreach (TreeNode<T> child in Children)
+                x = xmin + (mySize.Width - subtreeWidth) / 2;
+                foreach (var child in Children)
                 {
                     // Arrange this child's subtree.
-                    child.Arrange(gr, ref x, ref subtree_ymin);
+                    child.Arrange(gr, ref x, ref subtreeYmin);
 
                     // Allow room before the next sibling.
                     x += Hoffset;
                 }
 
                 // The subtree's width is this node's width.
-                subtree_width = my_size.Width;
+                subtreeWidth = mySize.Width;
             }
 
             // Set this node's center position.
-            Center = new PointF(
-                xmin + subtree_width / 2,
-                ymin + my_size.Height / 2);
+            _center = new PointF(xmin + subtreeWidth / 2, ymin + mySize.Height / 2);
 
             // Increase xmin to allow room for
             // the subtree before returning.
-            xmin += subtree_width;
+            xmin += subtreeWidth;
 
             // Set the return value for ymin.
             //ymin = biggest_ymin;
-        }
-
-        // Draw the subtree rooted at this node
-        // with the given upper left corner.
-        public void DrawTree(Graphics gr, ref float x, float y)
-        {
-            // Arrange the tree.
-            Arrange(gr, ref x, ref y);
-
-            // Draw the tree.
-            DrawTree(gr);
         }
 
         // Draw the subtree rooted at this node.
@@ -134,10 +117,10 @@ namespace howto_generic_treenode
         // Draw the links for the subtree rooted at this node.
         private void DrawSubtreeLinks(Graphics gr)
         {
-            foreach (TreeNode<T> child in Children)
+            foreach (var child in Children)
             {
                 // Draw the link between this node this child.
-                gr.DrawLine(MyPen, Center, child.Center);
+                gr.DrawLine(MyPen, _center, child._center);
 
                 // Recursively make the child draw its subtree nodes.
                 child.DrawSubtreeLinks(gr);
@@ -148,13 +131,10 @@ namespace howto_generic_treenode
         private void DrawSubtreeNodes(Graphics gr)
         {
             // Draw this node.
-            Data.Draw(Center.X, Center.Y, gr, MyPen, BgBrush, FontBrush, MyFont);
+            Data.Draw(_center.X, _center.Y, gr, MyPen, BgBrush, FontBrush, MyFont);
 
             // Recursively make the child draw its subtree nodes.
-            foreach (TreeNode<T> child in Children)
-            {
-                child.DrawSubtreeNodes(gr);
-            }
+            foreach (var child in Children) child.DrawSubtreeNodes(gr);
         }
     }
 }
