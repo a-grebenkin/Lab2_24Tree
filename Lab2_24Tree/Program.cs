@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace howto_generic_treenode
+namespace Lab2_24Tree
 {
     static class Program
     {

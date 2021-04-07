@@ -1,4 +1,4 @@
-﻿namespace howto_generic_treenode
+﻿namespace Lab2_24Tree
 {
     partial class Form1
     {
