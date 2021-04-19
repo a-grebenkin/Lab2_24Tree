@@ -10,9 +10,12 @@ namespace Lab2_24Tree
     public partial class Form1 : Form
     {
         private TwoThreeFourTree _tree;
+
         private TreeNode<CircleNode> _root =
-           new TreeNode<CircleNode>(new CircleNode("[]"));
+            new TreeNode<CircleNode>(new CircleNode("[]"));
+
         private readonly Random _rnd = new Random();
+
         public Form1()
         {
             InitializeComponent();
@@ -46,8 +49,8 @@ namespace Lab2_24Tree
                 if (checkBox1.Checked)
                     parent?.AddChild(new TreeNode<CircleNode>(new CircleNode("[]")));
                 return;
-
             }
+
             var text = "";
             for (var i = 0; i < tree.Values.Count; i++)
             {
@@ -55,6 +58,7 @@ namespace Lab2_24Tree
                 if (i != tree.Values.Count - 1)
                     text += " | ";
             }
+
             text += "";
             var node = new TreeNode<CircleNode>(new CircleNode(text));
 
@@ -73,6 +77,7 @@ namespace Lab2_24Tree
                 AddInTree(t, parent);
             }
         }
+
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -99,15 +104,26 @@ namespace Lab2_24Tree
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            var value = _rnd.Next(-1000,1000);
-            if (_tree == null)
-                _tree = new TwoThreeFourTree(value);
-            else
-                TwoThreeFourTree.Add(value, _tree);
-            RenderTree();
+            var count = int.Parse(textBox2.Text);
+            using var writer = new StreamWriter("test.txt");
+            var value = _rnd.Next(int.MinValue, int.MaxValue);
 
-            using var writer = new StreamWriter("test.txt", true);
-            writer.WriteLine(value);
+            _tree ??= new TwoThreeFourTree(value);
+            //writer.WriteLine(value);
+
+            for (var i = 0; i < count - 1; i++)
+            {
+                value = _rnd.Next(int.MinValue, int.MaxValue);
+                TwoThreeFourTree.Add(value, _tree);
+                //writer.WriteLine(value);
+            }
+
+            if (renderBox.Checked)
+            {
+                RenderTree();
+            }
+
+            iterInfo.Text = $@"Кол-во итераций: {TwoThreeFourTree.NumberIterations}";
         }
 
         private void button_redrav_Click(object sender, EventArgs e)
@@ -130,7 +146,10 @@ namespace Lab2_24Tree
                     _tree = new TwoThreeFourTree(val);
                 else
                     TwoThreeFourTree.Add(val, _tree);
-                RenderTree();
+                if (renderBox.Checked)
+                {
+                    RenderTree();
+                }
             }
         }
     }
