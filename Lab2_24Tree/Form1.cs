@@ -12,6 +12,7 @@ namespace Lab2_24Tree
         private TwoThreeFourTree _tree;
         private TreeNode<CircleNode> _root =
            new TreeNode<CircleNode>(new CircleNode("[]"));
+        private Random rnd = new Random();
         public Form1()
         {
             InitializeComponent();
@@ -98,7 +99,7 @@ namespace Lab2_24Tree
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            var value = _counter++;
+            var value = rnd.Next(-1000,1000);
             if (_tree == null)
                 _tree = new TwoThreeFourTree(value);
             else

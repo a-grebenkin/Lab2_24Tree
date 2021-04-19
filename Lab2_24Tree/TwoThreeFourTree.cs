@@ -49,6 +49,29 @@ namespace Lab2_24Tree
             return head;
         }
 
+        private void SortChildren(TwoThreeFourTree tree)
+        {
+            for (int i=0;i<tree.Children.Length;i++)
+                for (int j=0;j<tree.Children.Length;j++)
+                    if (tree.Children[i]!=null && tree.Children[j]!=null)
+                    {
+                        if (tree.Children[i].Values.Count>0 && tree.Children[j].Values.Count>0)
+                        {
+                            if(i>j && tree.Children[i].Values[0]<tree.Children[j].Values[0])
+                            {
+                                var tmp = tree.Children[i];
+                                tree.Children[i] = tree.Children[j];
+                                tree.Children[j] = tmp;
+                            }
+                            if(i<j && tree.Children[i].Values[0]>tree.Children[j].Values[0])
+                            {
+                                var tmp = tree.Children[i];
+                                tree.Children[i] = tree.Children[j];
+                                tree.Children[j] = tmp;
+                            }
+                        }
+                    }
+        }
         public static void Add(int value, TwoThreeFourTree tree)
         {
             while (true)
@@ -111,6 +134,7 @@ namespace Lab2_24Tree
                                 break;
                             }
 
+                            /*
                             if (tree.Children[1] != null && tree.Children[2] != null &&
                                 (tree.Children[0].Values[1] > tree.Children[2].Values[0]))
                             {
@@ -118,6 +142,8 @@ namespace Lab2_24Tree
                                 tree.Children[2] = tree.Children[1];
                                 tree.Children[1] = tmp;
                             }
+                            */
+                            tree.SortChildren(tree);
                         }
                         else
                         {
@@ -161,6 +187,8 @@ namespace Lab2_24Tree
                                 break;
                             }
 
+                            tree.SortChildren(tree.Parent);
+                            /*
                             if (tree.Parent.Children[1] != null && tree.Parent.Children[2] != null &&
                                 (tree.Parent.Children[1].Values[0] > tree.Parent.Children[2].Values[0]))
                             {
@@ -168,6 +196,7 @@ namespace Lab2_24Tree
                                 tree.Parent.Children[2] = tree.Parent.Children[1];
                                 tree.Parent.Children[1] = tmp;
                             }
+                            */
 
                             //назначаем новые узлы родителями детям старого узла
 
