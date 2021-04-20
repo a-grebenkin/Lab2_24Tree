@@ -2,17 +2,17 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Lab2_24Tree
 {
     public partial class Form1 : Form
     {
-        private int _counter = 1;
         private TwoThreeFourTree _tree;
         private TreeNode<CircleNode> _root =
            new TreeNode<CircleNode>(new CircleNode("[]"));
-        private Random rnd = new Random();
+        private readonly Random _rnd = new Random();
         public Form1()
         {
             InitializeComponent();
@@ -99,12 +99,15 @@ namespace Lab2_24Tree
 
         private void button_test_Click(object sender, EventArgs e)
         {
-            var value = rnd.Next(-1000,1000);
+            var value = _rnd.Next(-1000,1000);
             if (_tree == null)
                 _tree = new TwoThreeFourTree(value);
             else
                 TwoThreeFourTree.Add(value, _tree);
             RenderTree();
+
+            using var writer = new StreamWriter("test.txt", true);
+            writer.WriteLine(value);
         }
 
         private void button_redrav_Click(object sender, EventArgs e)
@@ -115,6 +118,20 @@ namespace Lab2_24Tree
         private void button_delete_Click(object sender, EventArgs e)
         {
             //Это уже не к нам:)
+        }
+
+        private void load_Click(object sender, EventArgs e)
+        {
+            using var reader = new StreamReader("test.txt");
+            while (!reader.EndOfStream)
+            {
+                var val = int.Parse(reader.ReadLine()!);
+                if (_tree == null)
+                    _tree = new TwoThreeFourTree(val);
+                else
+                    TwoThreeFourTree.Add(val, _tree);
+                RenderTree();
+            }
         }
     }
 }
