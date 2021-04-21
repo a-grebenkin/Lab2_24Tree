@@ -245,9 +245,10 @@ namespace Lab2_24Tree
 
                     }
                     break;
+                    // наткнуоись на любой дургой узел 
                 default:
                     {
-
+                        // если узел является листом добавляем значение в список его значений
                         if (tree.IsLeaf)
                         {
                             var values = tree.Values;
@@ -258,24 +259,30 @@ namespace Lab2_24Tree
                     }
                     break;
             }
-            //сюда попадаем после разбиения 4-узла
+            //сюда попадаем если узел не является листом (в случае 4-узла после разбиения)
             int n=0;
+            
+            //по значниям, хранящимся в узле, определяем в какой из дочерних узлов добавлять значение
             for(int i=0;i<tree.Values.Count;i++)
             {
                 if (value<tree.Values[i])
                 {
                     if (tree.Children[i]!=null)
                     {
+                        //если дочерний узел существует, добавлем в него
                         Add(value, tree.Children[i]);
                     }
                     else
                     {
+                        // иначе создаем новый с этим значением 
                         tree.Children[i] = new TwoThreeFourTree(value, tree);
                     }
                     return;
                 }
                 n = i;
             }
+            
+            //случай когда добавляем значение в крайний из существующих узлов или создаем крайний узел с эти значением
             if (tree.Children[n + 1] != null)
             {
                 Add(value, tree.Children[n + 1]);
