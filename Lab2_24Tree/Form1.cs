@@ -109,13 +109,16 @@ namespace Lab2_24Tree
             var value = _rnd.Next(int.MinValue, int.MaxValue);
 
             _tree = new TwoThreeFourTree(value);
-            TwoThreeFourTree.NumberIterations = 1;
 
-            for (var i = 0; i < count - 1; i++)
+            for (var i = 0; i < count - 2; i++)
             {
                 value = _rnd.Next(int.MinValue, int.MaxValue);
                 TwoThreeFourTree.Add(value, _tree);
             }
+            
+            TwoThreeFourTree.NumberIterations = 1;
+            value = _rnd.Next(int.MinValue, int.MaxValue);
+            TwoThreeFourTree.Add(value, _tree);
 
             if (renderBox.Checked)
             {
