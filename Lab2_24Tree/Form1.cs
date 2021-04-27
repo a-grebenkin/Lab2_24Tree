@@ -107,18 +107,20 @@ namespace Lab2_24Tree
             var count = int.Parse(textBox2.Text);
             using var writer = new StreamWriter("test.txt");
             var value = _rnd.Next(int.MinValue, int.MaxValue);
-
-            _tree = new TwoThreeFourTree(value);
-
-            for (var i = 0; i < count - 2; i++)
+            
+            if (count>0)
             {
+                _tree = new TwoThreeFourTree(value);
+                TwoThreeFourTree.NumberIterations = 1;
+            }       
+
+            for (var i = 0; i < count - 1; i++)
+            {
+                if(i== count - 2)
+                    TwoThreeFourTree.NumberIterations = 0;
                 value = _rnd.Next(int.MinValue, int.MaxValue);
                 TwoThreeFourTree.Add(value, _tree);
             }
-            
-            TwoThreeFourTree.NumberIterations = 1;
-            value = _rnd.Next(int.MinValue, int.MaxValue);
-            TwoThreeFourTree.Add(value, _tree);
 
             if (renderBox.Checked)
             {
